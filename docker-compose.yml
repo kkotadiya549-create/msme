@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongodb:27017/whatsapp
+      # Provide dummy values or valid tokens for the demo
+      - WHATSAPP_TOKEN=${WHATSAPP_TOKEN:-dummy}
+      - FROM_PHONE_NUMBER_ID=${FROM_PHONE_NUMBER_ID:-dummy}
+      - VERIFY_TOKEN=${VERIFY_TOKEN:-dummy}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-dummy}
+      - OWNER_PHONE_NUMBER=${OWNER_PHONE_NUMBER:-}
+      - DIGEST_CRON_SCHEDULE="0 18 * * *"
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
